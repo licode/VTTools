@@ -39,6 +39,10 @@ from skxray.fitting.api import (QuadraticModel, GaussianModel,
 import logging
 logger = logging.getLogger(__name__)
 
+import sys
+from PyQt4 import QtGui
+
+
 def quadratic_model(prefix,
                     a, a_vary, a_range,
                     b, b_vary, b_range,
@@ -148,6 +152,47 @@ def fit_engine_list(g, data):
         result = g.fit(v[1], x=v[0])
         result_list.append(result)
     return result_list
+
+
+class Example(QtGui.QDialog):
+
+    def __init__(self):
+        super(Example, self).__init__()
+
+        self.initUI()
+
+    def initUI(self):
+
+        self.statusBar().showMessage('Ready')
+
+        self.setGeometry(300, 300, 250, 150)
+        self.setWindowTitle('Statusbar')
+        self.show()
+
+
+def get_element(x):
+    """
+    Plot spectrum.
+
+    Parameters
+    ----------
+    x : str
+        a random input
+
+    Returns
+    -------
+    a : str
+        a random return
+    """
+
+    app = QtGui.QApplication(sys.argv)
+    ex = Example()
+    sys.exit(app.exec_())
+
+    # just create a random return
+    a = 10
+
+    return a
 
 
 def set_range(model_name,
@@ -267,7 +312,7 @@ for func_name in [gaussian_model, lorentzian2_model, lorentzian_model]:
     func_name.sigma_vary = ['fixed', 'free', 'bounded']
 
 
-function_list = [fit_engine, fit_engine_list, quadratic_model]
+function_list = [fit_engine, fit_engine_list, quadratic_model, get_element]
 
 for func_name in function_list:
     setattr(mod, func_name.__name__, func_name)
